@@ -6,6 +6,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 // Ініціалізація бази даних SQLite у пам'яті (створюється наново при кожному запуску)
 const db = new sqlite3.Database(':memory:');
 
