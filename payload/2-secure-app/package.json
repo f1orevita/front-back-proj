@@ -1,0 +1,14 @@
+{
+  "name": "fornt-back-proj",
+  "version": "1.0.0",
+  "description": "Навчальний проєкт: SQL Injection та захист",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  }
+}
