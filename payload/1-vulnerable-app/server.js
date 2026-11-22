@@ -6,8 +6,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
+app.use(express.static(__dirname + '/ui'));
 
 // Ініціалізація бази даних SQLite у пам'яті (створюється наново при кожному запуску)
 const db = new sqlite3.Database(':memory:');
@@ -43,23 +42,8 @@ db.serialize(() => {
     stmtProducts.finalize();
 });
 
-// Базова сторінка для перевірки роботи бекенду без фронтенду
 app.get('/', (req, res) => {
-    res.send(`
-        <h2>Тестовий стенд SQL Injection (Backend)</h2>
-        <h3>1. Вразлива форма входу (POST /login)</h3>
-        <form action="/login" method="POST">
-            <input type="text" name="login" placeholder="Логін" required />
-            <input type="text" name="password" placeholder="Пароль" required />
-            <button type="submit">Увійти</button>
-        </form>
-        <hr>
-        <h3>2. Вразливий пошук товарів (GET /search)</h3>
-        <form action="/search" method="GET">
-            <input type="text" name="q" placeholder="Назва товару" />
-            <button type="submit">Знайти</button>
-        </form>
-    `);
+    res.sendFile(__dirname + '/ui/index.html');
 });
 
 // =========================================================================

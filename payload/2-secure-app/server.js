@@ -4,8 +4,7 @@ const path = require('path');
 const app = express();
 
 // Налаштування EJS (на виріст для Учасника 2)
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(__dirname + '/ui'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -44,6 +43,11 @@ db.serialize(() => {
 // =========================================================================
 // ЗАХИЩЕНИЙ МАРШРУТ 1: Авторизація через Prepared Statement
 // =========================================================================
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/ui/index.html');
+});
+
 app.post('/login', (req, res) => {
     const { login, password } = req.body;
 
