@@ -1,5 +1,14 @@
 "use strict";
 
+function esc(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
 function fillLogin(mode) {
     let loginInput = document.getElementById("loginInput");
     let passwordInput = document.getElementById("passwordInput");
@@ -66,25 +75,25 @@ function treatLoginData(data) {
     if (data.executed_query) {
         let paramsText = "";
         if (data.params) {
-            paramsText = "<br/><strong>Параметри:</strong> <code>" + JSON.stringify(data.params) + "</code>";
+            paramsText = "<br/><strong>Параметри:</strong> <code>" + esc(JSON.stringify(data.params)) + "</code>";
         }
         block.innerHTML += "<div class='alert alert-secondary'><strong>Підготовлений SQL-запит:</strong><br/><code>"
-            + data.executed_query + "</code>" + paramsText + "</div>";
+            + esc(data.executed_query) + "</code>" + paramsText + "</div>";
     }
 
     if (data.error) {
         block.innerHTML += "<div class='alert alert-warning'><strong>Помилка БД:</strong> "
-            + data.error + "</div>";
+            + esc(data.error) + "</div>";
     } else if (data.user) {
-        block.innerHTML += "<div class='alert alert-success'><strong>" + data.message + "</strong></div>";
+        block.innerHTML += "<div class='alert alert-success'><strong>" + esc(data.message) + "</strong></div>";
         block.innerHTML += "<ul class='list-group'>"
-            + "<li class='list-group-item'><strong>ID:</strong> " + data.user.id + "</li>"
-            + "<li class='list-group-item'><strong>Логін:</strong> " + data.user.login + "</li>"
-            + "<li class='list-group-item'><strong>Роль:</strong> " + data.user.role + "</li>"
-            + "<li class='list-group-item'><strong>Секретна нотатка:</strong> " + data.user.secret_note + "</li>"
+            + "<li class='list-group-item'><strong>ID:</strong> " + esc(data.user.id) + "</li>"
+            + "<li class='list-group-item'><strong>Логін:</strong> " + esc(data.user.login) + "</li>"
+            + "<li class='list-group-item'><strong>Роль:</strong> " + esc(data.user.role) + "</li>"
+            + "<li class='list-group-item'><strong>Секретна нотатка:</strong> " + esc(data.user.secret_note) + "</li>"
             + "</ul>";
     } else {
-        block.innerHTML += "<div class='alert alert-danger'><strong>" + data.message + "</strong></div>";
+        block.innerHTML += "<div class='alert alert-danger'><strong>" + esc(data.message) + "</strong></div>";
     }
 }
 
@@ -95,7 +104,7 @@ function getSearchData(e) {
     e.preventDefault();
 
     let searchValue = document.getElementById("searchInput").value;
-    let url = "/search?q=" + searchValue;
+    let url = "/search?q=" + encodeURIComponent(searchValue);
 
     fetch(url)
         .then(response => response.json())
@@ -109,24 +118,24 @@ function treatSearchData(data) {
     if (data.executed_query) {
         let paramText = "";
         if (data.param) {
-            paramText = "<br/><strong>Параметр:</strong> <code>" + data.param + "</code>";
+            paramText = "<br/><strong>Параметр:</strong> <code>" + esc(data.param) + "</code>";
         }
         block.innerHTML += "<div class='alert alert-secondary'><strong>Підготовлений SQL-запит:</strong><br/><code>"
-            + data.executed_query + "</code>" + paramText + "</div>";
+            + esc(data.executed_query) + "</code>" + paramText + "</div>";
     }
 
     if (data.error) {
         block.innerHTML += "<div class='alert alert-warning'><strong>Помилка БД:</strong> "
-            + data.error + "</div>";
+            + esc(data.error) + "</div>";
     } else if (data.results && data.results.length > 0) {
         let tableHtml = "<table class='table table-bordered table-striped'>"
             + "<thead><tr><th>ID</th><th>Назва (title)</th><th>Ціна (price)</th></tr></thead><tbody>";
 
         for (let item of data.results) {
             tableHtml += "<tr>"
-                + "<td>" + item.id + "</td>"
-                + "<td>" + item.title + "</td>"
-                + "<td>" + item.price + "</td>"
+                + "<td>" + esc(item.id) + "</td>"
+                + "<td>" + esc(item.title) + "</td>"
+                + "<td>" + esc(item.price) + "</td>"
                 + "</tr>";
         }
 
